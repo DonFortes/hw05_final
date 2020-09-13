@@ -12,11 +12,14 @@ __pycache__/
 .AppleDouble
 .LSOverride
 
+.vscode/
+media/
+
+z Декомпозиция
 *.sublime-project
 *.sublime-workspace
 
 static/
 posts/static/
-media/
 
 db.sqlite3
