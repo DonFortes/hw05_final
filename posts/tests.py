@@ -150,9 +150,11 @@ class SimpleTest(TestCase):
                    "является изображением.")
 
     def test_cache(self):
-        Post.objects.create(text='New_test_post',
-                                        author=self.user,
-                                        group=self.group)
+        Post.objects.create(
+            text='New_test_post',
+            author=self.user,
+            group=self.group
+            )
         response = self.logged.get(reverse("index"))
         cache_test = response["Cache-Control"]
         self.assertEqual(cache_test, "max-age=20")
@@ -209,7 +211,7 @@ class SimpleTest(TestCase):
         self.assertEqual(post.group, post2.group)
 
     def test_post_on_unfollow_page(self):
-        post = Post.objects.create(
+        Post.objects.create(
             text='New_test_post', author=self.user_author,
             group=self.group)
         response = self.logged.get(reverse('follow_index'))
@@ -244,7 +246,7 @@ class SimpleTest(TestCase):
             text='New_test_post', author=self.user_author,
             group=self.group)
 
-        response = self.unlogged.post(
+        self.unlogged.post(
             reverse('add_comment', args=[self.user_author, post.id]),
             {
                 'text': 'Comment'

@@ -200,4 +200,3 @@ def profile_unfollow(request, username):
     if Follow.objects.filter(user=user, author=author).exists():
         Follow.objects.filter(user=user, author=author).delete()
         return redirect(url)
-
