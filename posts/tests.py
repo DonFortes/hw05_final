@@ -150,7 +150,7 @@ class SimpleTest(TestCase):
                    "является изображением.")
 
     def test_cache(self):
-        post = Post.objects.create(text='New_test_post',
+        Post.objects.create(text='New_test_post',
                                         author=self.user,
                                         group=self.group)
         response = self.logged.get(reverse("index"))
