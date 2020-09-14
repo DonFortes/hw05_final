@@ -9,7 +9,11 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = ['text', 'group', 'image']
         help_texts = {'text': 'Поле для вашего поста'}
-        labels = {'text': 'Пишите здесь:', 'group': 'Выберите группу'}
+        labels = {
+            'text': 'Пишите здесь:',
+            'group': 'Выберите группу',
+            'image': 'Загрузите изображение'
+            }
 
 
 class CommentForm(forms.ModelForm):

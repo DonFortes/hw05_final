@@ -169,24 +169,24 @@ class SimpleTest(TestCase):
         self.assertEqual(len(response.context["page"]), 2)
 
     def test_logged_follow(self):
-        Post.objects.create(
-            text='New_test_post', author=self.user_author,
-            group=self.group)
         self.logged.get(
             reverse('profile_follow', args=['martin']),
             follow=True)
-        self.assertTrue(Follow.objects.filter(
-            user=self.user, author=self.user_author).exists())
+
+        follows = Follow.objects.all()
+        self.assertEqual(len(follows), 1)
+
+        follow = follows[0]
+        self.assertEqual(follow.user.username, 'sarah')
+        self.assertEqual(follow.author.username, 'martin')
 
     def test_unlogged_follow(self):
-        Post.objects.create(
-            text='New_test_post', author=self.user_author,
-            group=self.group)
         self.unlogged.get(
             reverse('profile_follow', args=['martin']),
             follow=True)
-        self.assertFalse(Follow.objects.filter(
-            user=self.user, author=self.user_author).exists())
+
+        follows = Follow.objects.all()
+        self.assertEqual(len(follows), 0)
 
     def test_logged_unfollow(self):
         Follow.objects.create(
@@ -251,9 +251,5 @@ class SimpleTest(TestCase):
             },
             follow=True)
 
-        response = self.logged.get(
-            reverse("post", args=[post.author, post.id]))
-
-        maybe_comments = response.context["items"]
-        maybe_comment = len(maybe_comments)
-        self.assertEqual(maybe_comment, 0)
+        comments = Comment.objects.all()
+        self.assertEqual(len(comments), 0)

@@ -136,8 +136,6 @@ def post_edit(request, username, post_id):
 
 
 def page_not_found(request, exception):
-    # Переменная exception содержит отладочную информацию,
-    # выводить её в шаблон пользовательской страницы 404 мы не станем
     return render(
         request,
         "misc/404.html",
@@ -170,11 +168,7 @@ def add_comment(request, username, post_id):
 @login_required
 def follow_index(request):
     logged = request.user
-    followings = Follow.objects.filter(user=logged)
-    posts = []
-    for following in followings:
-        author = User.objects.get(username=following.author)
-        posts += author.posts.all()
+    posts = Post.objects.filter(author__following__user=logged)
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
@@ -190,13 +184,12 @@ def profile_follow(request, username):
     author = get_object_or_404(User, username=username)
     url = reverse("profile", args=[username])
     user = request.user
-    if Follow.objects.filter(user=user, author=author).exists():
-        return redirect(url)
-    if author == user:
-        return redirect(url)
-    else:
-        Follow.objects.create(user=user, author=author)
-        return redirect(url)
+    if author != user:
+        Follow.objects.get_or_create(
+            user=user,
+            author=author
+        )
+    return redirect(url)
 
 
 @login_required
@@ -206,6 +199,5 @@ def profile_unfollow(request, username):
     user = request.user
     if Follow.objects.filter(user=user, author=author).exists():
         Follow.objects.filter(user=user, author=author).delete()
-        return redirect(url)  # JsonResponse({'status': 'ok'})
-    else:
         return redirect(url)
+
