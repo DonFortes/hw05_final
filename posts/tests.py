@@ -175,10 +175,8 @@ class SimpleTest(TestCase):
             reverse('profile_follow', args=['martin']),
             follow=True)
 
-        follows = Follow.objects.all()
-        self.assertEqual(len(follows), 1)
+        follow = Follow.objects.first()
 
-        follow = follows[0]
         self.assertEqual(follow.user.username, 'sarah')
         self.assertEqual(follow.author.username, 'martin')
 
@@ -187,8 +185,8 @@ class SimpleTest(TestCase):
             reverse('profile_follow', args=['martin']),
             follow=True)
 
-        follows = Follow.objects.all()
-        self.assertEqual(len(follows), 0)
+        follow = Follow.objects.count()
+        self.assertEqual(follow, 0)
 
     def test_logged_unfollow(self):
         Follow.objects.create(
@@ -253,5 +251,5 @@ class SimpleTest(TestCase):
             },
             follow=True)
 
-        comments = Comment.objects.all()
-        self.assertEqual(len(comments), 0)
+        comment = Comment.objects.count()
+        self.assertEqual(comment, 0)

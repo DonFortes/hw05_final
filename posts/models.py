@@ -61,7 +61,7 @@ class Follow(models.Model):
                              null=True
                              )
     author = models.ForeignKey(User,
-                               on_delete=models.DO_NOTHING,
+                               on_delete=models.PROTECT,
                                related_name="following",
                                null=True
                                )
